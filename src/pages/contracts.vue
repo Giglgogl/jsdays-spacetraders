@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useQuery } from '@tanstack/vue-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import ContractsCard from '@/components/Contracts/Card.vue'
 import { useAgentStore } from '@/stores/agent'
 
@@ -13,6 +13,20 @@ const query = useQuery({
   }),
   queryKey: ['contracts'],
 })
+
+const queryClient = useQueryClient()
+const mutation = useMutation({
+  mutationFn: (id: string) => {
+    return agentStore.agentApi.post('/my/contracts/{contractId}/accept', {
+      path: {
+        contractId: id,
+      },
+    })
+  },
+  onSuccess: () => {
+    return queryClient.invalidateQueries({ queryKey: ['contracts'] })
+  },
+})
 </script>
 
 <template>
@@ -21,8 +35,7 @@ const query = useQuery({
       v-for="contract in query.data.value?.data"
       :key="contract.id"
       :contract="contract"
+      @accept="id => mutation.mutate(id)"
     />
-
-    <pre>{{ query.data }}</pre>
   </div>
 </template>
