@@ -48,6 +48,15 @@ const systemQuery = useQuery({
     {{ systemSymbol }}
 
     <ul>
+      <li>System: {{ systemSymbol }}</li>
+      <li>Status: {{ query.data.value?.data.nav.status }}</li>
+      <li>Startpunkt: {{ query.data.value?.data.nav.route.origin }}</li>
+      <li>Ziel: {{ query.data.value?.data.nav.route.destination }}</li>
+      <li>Abflugzeit: {{ query.data.value?.data.nav.route.departureTime }}</li>
+      <li>Ankunftszeit: {{ query.data.value?.data.nav.route.arrival }}</li>
+    </ul>
+
+    <ul>
       <li
         v-for="waypoint in systemQuery.data.value?.data"
         :key="waypoint.symbol"
